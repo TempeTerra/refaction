@@ -50,7 +50,9 @@ namespace refactor_me.Models
 
                 Id = Guid.Parse(rdr["Id"].ToString());
                 Name = rdr["Name"].ToString();
-                Description = (DBNull.Value == rdr["Description"]) ? null : rdr["Description"].ToString();
+                Description = (DBNull.Value == rdr["Description"]) 
+                    ? null 
+                    : rdr["Description"].ToString();
                 Price = decimal.Parse(rdr["Price"].ToString());
                 DeliveryPrice = decimal.Parse(rdr["DeliveryPrice"].ToString());
             }
@@ -60,9 +62,9 @@ namespace refactor_me.Models
         {
             using (var conn = Helpers.NewConnection())
             {
-                var cmd = IsNew ?
-                    new SqlCommand($"insert into product (id, name, description, price, deliveryprice) values ('{Id}', '{Name}', '{Description}', {Price}, {DeliveryPrice})", conn) :
-                    new SqlCommand($"update product set name = '{Name}', description = '{Description}', price = {Price}, deliveryprice = {DeliveryPrice} where id = '{Id}'", conn);
+                var cmd = IsNew
+                    ? new SqlCommand($"insert into product (id, name, description, price, deliveryprice) values ('{Id}', '{Name}', '{Description}', {Price}, {DeliveryPrice})", conn)
+                    : new SqlCommand($"update product set name = '{Name}', description = '{Description}', price = {Price}, deliveryprice = {DeliveryPrice} where id = '{Id}'", conn);
 
                 conn.Open();
                 cmd.ExecuteNonQuery();
@@ -75,7 +77,9 @@ namespace refactor_me.Models
         public void Delete()
         {
             foreach (var option in new ProductOptions(Id).Items)
+            {
                 option.Delete();
+            }
 
             using (var conn = Helpers.NewConnection())
             {

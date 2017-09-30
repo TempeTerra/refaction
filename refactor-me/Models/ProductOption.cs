@@ -49,7 +49,9 @@ namespace refactor_me.Models
                 Id = Guid.Parse(rdr["Id"].ToString());
                 ProductId = Guid.Parse(rdr["ProductId"].ToString());
                 Name = rdr["Name"].ToString();
-                Description = (DBNull.Value == rdr["Description"]) ? null : rdr["Description"].ToString();
+                Description = (DBNull.Value == rdr["Description"]) 
+                    ? null 
+                    : rdr["Description"].ToString();
             }
         }
 
@@ -57,9 +59,9 @@ namespace refactor_me.Models
         {
             using (var conn = Helpers.NewConnection())
             {
-                var cmd = IsNew ?
-                    new SqlCommand($"insert into productoption (id, productid, name, description) values ('{Id}', '{ProductId}', '{Name}', '{Description}')", conn) :
-                    new SqlCommand($"update productoption set name = '{Name}', description = '{Description}' where id = '{Id}'", conn);
+                var cmd = IsNew 
+                    ? new SqlCommand($"insert into productoption (id, productid, name, description) values ('{Id}', '{ProductId}', '{Name}', '{Description}')", conn) 
+                    : new SqlCommand($"update productoption set name = '{Name}', description = '{Description}' where id = '{Id}'", conn);
 
                 conn.Open();
                 cmd.ExecuteNonQuery();
