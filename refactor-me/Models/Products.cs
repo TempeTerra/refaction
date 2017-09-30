@@ -4,15 +4,31 @@ using System.Data.SqlClient;
 
 namespace refactor_me.Models
 {
+    /// <summary>
+    /// Represents a list of <see cref="Product"/>s
+    /// </summary>
     public class Products
     {
+        /// <summary>
+        /// The list of items
+        /// </summary>
+        /// <remarks>
+        /// This is just to make sure the JSON renders as expected
+        /// </remarks>
         public List<Product> Items { get; private set; }
 
+        /// <summary>
+        /// A list of all the <see cref="Product"/>s
+        /// </summary>
         public Products()
         {
             LoadProducts();
         }
 
+        /// <summary>
+        /// The list of <see cref="Product"/>s with names matching the supplied pattern
+        /// </summary>
+        /// <param name="pattern">A pattern for a case-insensitive substring search of Product names</param>
         public Products(string pattern)
         {
             LoadProducts(pattern);
@@ -48,7 +64,7 @@ namespace refactor_me.Models
         /// </remarks>
         private void LoadProducts(string pattern)
         {
-            Items = new List<Product>();
+            Items.Clear();
             using (var conn = Helpers.NewConnection())
             {
                 conn.Open();

@@ -5,6 +5,9 @@ using System.Data.SqlClient;
 
 namespace refactor_me.Models
 {
+    /// <summary>
+    /// An optional subtype of a <see cref="Product"/>, for example a colour variant
+    /// </summary>
     public class ProductOption : BaseModel
     {
         /// <summary>
@@ -13,13 +16,23 @@ namespace refactor_me.Models
         [JsonIgnore]
         public Guid ProductId { get; set; }
 
+        /// <summary>
+        /// The full product name including the option variant
+        /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// A description of the product
+        /// </summary>
         public string Description { get; set; }
 
         /// <summary>
         /// Create a new ProductOption
         /// </summary>
+        /// <remarks>
+        /// This will also get called by the model binder when data is
+        /// sent to the controller over HTTP
+        /// </remarks>
         public ProductOption()
             : base(isNew: true)
         {
@@ -57,6 +70,9 @@ namespace refactor_me.Models
             }
         }
 
+        /// <summary>
+        /// Save the current state of this ProductOption
+        /// </summary>
         public void Save()
         {
             using (var conn = Helpers.NewConnection())
@@ -82,6 +98,9 @@ namespace refactor_me.Models
             }
         }
 
+        /// <summary>
+        /// Delete the record for this ProductOption from permanent storage
+        /// </summary>
         public void Delete()
         {
             using (var conn = Helpers.NewConnection())

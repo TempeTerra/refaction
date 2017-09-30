@@ -4,15 +4,31 @@ using System.Data.SqlClient;
 
 namespace refactor_me.Models
 {
+    /// <summary>
+    /// Represents a list of <see cref="ProductOption"/>s
+    /// </summary>
     public class ProductOptions
     {
+        /// <summary>
+        /// The list of items
+        /// </summary>
+        /// <remarks>
+        /// This is just to make sure the JSON renders as expected
+        /// </remarks>
         public List<ProductOption> Items { get; private set; }
 
+        /// <summary>
+        /// Get a list of all the <see cref="ProductOption"/>s
+        /// </summary>
         public ProductOptions()
         {
             LoadProductOptions();
         }
 
+        /// <summary>
+        /// Get a list of <see cref="ProductOption"/>s for a specific <see cref="Product"/>
+        /// </summary>
+        /// <param name="productId">The ID of the owning product</param>
         public ProductOptions(Guid productId)
         {
             LoadProductOptions(productId);

@@ -5,19 +5,41 @@ using System.Data.SqlClient;
 
 namespace refactor_me.Models
 {
+    /// <summary>
+    /// A high-level description of a product.
+    /// 
+    /// May have <see cref="ProductOption"/>s to specify different subtypes, 
+    /// such as different colours.
+    /// </summary>
     public class Product : BaseModel
     {
+        /// <summary>
+        /// The name of the Product
+        /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// A description of the Product
+        /// </summary>
         public string Description { get; set; }
 
+        /// <summary>
+        /// The price of the Product
+        /// </summary>
         public decimal Price { get; set; }
 
+        /// <summary>
+        /// The additional price to have the product delivered (?)
+        /// </summary>
         public decimal DeliveryPrice { get; set; }
 
         /// <summary>
         /// Create a new Product
         /// </summary>
+        /// <remarks>
+        /// This will also get called by the model binder when data is
+        /// sent to the controller over HTTP
+        /// </remarks>
         public Product()
             : base(isNew: true)
         {
@@ -44,7 +66,7 @@ namespace refactor_me.Models
                 // -- An alternative would be to return a new Product instead,
                 // -- perhaps with the supplied id, but that goes against the 
                 // -- intended behaviour of this class and is probably not what
-                // -- the caller intended.
+                // -- the caller expects.
                 if (!rdr.Read())
                 {
                     throw new ArgumentException($"No {nameof(Product)} was found with Id {id}");
@@ -60,6 +82,9 @@ namespace refactor_me.Models
             }
         }
 
+        /// <summary>
+        /// Save the current state of the Product
+        /// </summary>
         public void Save()
         {
             using (var conn = Helpers.NewConnection())
@@ -87,7 +112,7 @@ namespace refactor_me.Models
         }
 
         /// <summary>
-        /// Delete this Product and also any associated <see cref="ProductOption"/>s
+        /// Delete the Product and also any associated <see cref="ProductOption"/>s
         /// </summary>
         public void Delete()
         {
