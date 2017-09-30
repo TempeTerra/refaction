@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace refactor_me.Models.Base
+namespace refactor_me.Entities.Base
 {
     /// <summary>
     /// A base class for other models in this project.
@@ -14,7 +14,7 @@ namespace refactor_me.Models.Base
     /// Enforces correct setting of IsNew from subclasses.
     /// Checks for default-value primary keys, which sounds like an error.
     /// </remarks>
-    public class BaseModel
+    public class BaseEntity
     {
         private Guid _id;
 
@@ -56,7 +56,7 @@ namespace refactor_me.Models.Base
         /// or one loaded from storage.
         /// </summary>
         /// <param name="isNew">False if the object already exists in storage</param>
-        protected BaseModel(bool isNew)
+        protected BaseEntity(bool isNew)
         {
             IsNew = isNew;
         }
