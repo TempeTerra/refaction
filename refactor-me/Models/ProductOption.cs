@@ -7,6 +7,10 @@ namespace refactor_me.Models
 {
     public class ProductOption : BaseModel
     {
+        /// <summary>
+        /// The ID of the product this option applies to
+        /// </summary>
+        [JsonIgnore]
         public Guid ProductId { get; set; }
 
         public string Name { get; set; }
