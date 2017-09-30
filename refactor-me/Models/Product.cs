@@ -1,13 +1,12 @@
 ﻿using Newtonsoft.Json;
+using refactor_me.Models.Base;
 using System;
 using System.Data.SqlClient;
 
 namespace refactor_me.Models
 {
-    public class Product
+    public class Product : BaseModel
     {
-        public Guid Id { get; set; }
-
         public string Name { get; set; }
 
         public string Description { get; set; }
@@ -16,27 +15,38 @@ namespace refactor_me.Models
 
         public decimal DeliveryPrice { get; set; }
 
-        [JsonIgnore]
-        public bool IsNew { get; }
-
+        /// <summary>
+        /// Create a new Product
+        /// </summary>
         public Product()
+            : base(isNew: true)
         {
             Id = Guid.NewGuid();
-            IsNew = true;
         }
 
+        /// <summary>
+        /// Retrieve an existing Product from storage
+        /// </summary>
+        /// <param name="id">The id of an existing stored product</param>
         public Product(Guid id)
+            : base(isNew: false)
         {
-            IsNew = true;
             var conn = Helpers.NewConnection();
             var cmd = new SqlCommand($"select * from product where id = '{id}'", conn);
             conn.Open();
 
             var rdr = cmd.ExecuteReader();
-            if (!rdr.Read())
-                return;
 
-            IsNew = false;
+            // Exception if no matching record is found in the database
+            // -- An alternative would be to return a new Product instead,
+            // -- perhaps with the supplied id, but that goes against the 
+            // -- intended behaviour of this class and is probably not what
+            // -- the caller intended.
+            if (!rdr.Read())
+            {
+                throw new ArgumentException($"No {nameof(Product)} was found with id {id}");
+            }
+
             Id = Guid.Parse(rdr["Id"].ToString());
             Name = rdr["Name"].ToString();
             Description = (DBNull.Value == rdr["Description"]) ? null : rdr["Description"].ToString();
