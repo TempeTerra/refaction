@@ -33,8 +33,10 @@ namespace refactor_me.Models
         {
             using (var conn = Helpers.NewConnection())
             {
-                var cmd = new SqlCommand($"select * from product where id = '{id}'", conn);
                 conn.Open();
+
+                var cmd = new SqlCommand("select * from product where id = @Id", conn);
+                cmd.Parameters.AddWithValue("@Id", Id);
 
                 var rdr = cmd.ExecuteReader();
 
@@ -45,13 +47,13 @@ namespace refactor_me.Models
                 // -- the caller intended.
                 if (!rdr.Read())
                 {
-                    throw new ArgumentException($"No {nameof(Product)} was found with id {id}");
+                    throw new ArgumentException($"No {nameof(Product)} was found with Id {id}");
                 }
 
                 Id = Guid.Parse(rdr["Id"].ToString());
                 Name = rdr["Name"].ToString();
-                Description = (DBNull.Value == rdr["Description"]) 
-                    ? null 
+                Description = (DBNull.Value == rdr["Description"])
+                    ? null
                     : rdr["Description"].ToString();
                 Price = decimal.Parse(rdr["Price"].ToString());
                 DeliveryPrice = decimal.Parse(rdr["DeliveryPrice"].ToString());
@@ -62,11 +64,24 @@ namespace refactor_me.Models
         {
             using (var conn = Helpers.NewConnection())
             {
-                var cmd = IsNew
-                    ? new SqlCommand($"insert into product (id, name, description, price, deliveryprice) values ('{Id}', '{Name}', '{Description}', {Price}, {DeliveryPrice})", conn)
-                    : new SqlCommand($"update product set name = '{Name}', description = '{Description}', price = {Price}, deliveryprice = {DeliveryPrice} where id = '{Id}'", conn);
-
                 conn.Open();
+
+                SqlCommand cmd;
+                if (IsNew)
+                {
+                    cmd = new SqlCommand("insert into product (id, name, description, price, deliveryprice) values (@Id, @Name, @Description, @Price, @DeliveryPrice)", conn);
+                }
+                else
+                {
+                    cmd = new SqlCommand("update product set name = @Name, description = @Description, price = @Price, deliveryprice = @DeliveryPrice where id = @Id", conn);
+                }
+
+                cmd.Parameters.AddWithValue("@Id", Id);
+                cmd.Parameters.AddWithValue("@Name", Name);
+                cmd.Parameters.AddWithValue("@Description", Description);
+                cmd.Parameters.AddWithValue("@Price", Price);
+                cmd.Parameters.AddWithValue("@DeliveryPrice", DeliveryPrice);
+
                 cmd.ExecuteNonQuery();
             }
         }
@@ -76,15 +91,20 @@ namespace refactor_me.Models
         /// </summary>
         public void Delete()
         {
+            // Delete related ProductOptions
             foreach (var option in new ProductOptions(Id).Items)
             {
                 option.Delete();
             }
 
+            // Delete the record for this instance
             using (var conn = Helpers.NewConnection())
             {
                 conn.Open();
-                var cmd = new SqlCommand($"delete from product where id = '{Id}'", conn);
+
+                var cmd = new SqlCommand($"delete from product where id = @Id", conn);
+                cmd.Parameters.AddWithValue("@Id", Id);
+
                 cmd.ExecuteNonQuery();
             }
         }

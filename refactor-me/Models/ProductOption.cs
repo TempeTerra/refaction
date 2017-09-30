@@ -35,8 +35,10 @@ namespace refactor_me.Models
         {
             using (var conn = Helpers.NewConnection())
             {
-                var cmd = new SqlCommand($"select * from productoption where id = '{id}'", conn);
                 conn.Open();
+
+                var cmd = new SqlCommand("select * from productoption where id = @Id", conn);
+                cmd.Parameters.AddWithValue("@Id", Id);
 
                 var rdr = cmd.ExecuteReader();
 
@@ -59,11 +61,23 @@ namespace refactor_me.Models
         {
             using (var conn = Helpers.NewConnection())
             {
-                var cmd = IsNew 
-                    ? new SqlCommand($"insert into productoption (id, productid, name, description) values ('{Id}', '{ProductId}', '{Name}', '{Description}')", conn) 
-                    : new SqlCommand($"update productoption set name = '{Name}', description = '{Description}' where id = '{Id}'", conn);
-
                 conn.Open();
+
+                SqlCommand cmd;
+                if (IsNew)
+                {
+                    cmd = new SqlCommand($"insert into productoption (id, productid, name, description) values (@Id, @ProductId, @Name, @Description)", conn);
+                }
+                else
+                {
+                    cmd = new SqlCommand($"update productoption set name = @Name, description = @Description where id = @Id", conn);
+                }
+
+                cmd.Parameters.AddWithValue("@Id", Id);
+                cmd.Parameters.AddWithValue("@ProductId", ProductId); // this is not used in the second query, test to check if it's a problem
+                cmd.Parameters.AddWithValue("@Name", Name);
+                cmd.Parameters.AddWithValue("@Description", Description);
+
                 cmd.ExecuteNonQuery();
             }
         }
@@ -73,7 +87,10 @@ namespace refactor_me.Models
             using (var conn = Helpers.NewConnection())
             {
                 conn.Open();
-                var cmd = new SqlCommand($"delete from productoption where id = '{Id}'", conn);
+
+                var cmd = new SqlCommand("delete from productoption where id = @Id", conn);
+                cmd.Parameters.AddWithValue("@Id", Id);
+
                 cmd.ExecuteReader();
             }
         }
