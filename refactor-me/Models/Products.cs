@@ -13,9 +13,9 @@ namespace refactor_me.Models
             LoadProducts();
         }
 
-        public Products(string name)
+        public Products(string pattern)
         {
-            LoadProducts($"where lower(name) like '%{name.ToLower()}%'");
+            LoadProducts(pattern);
         }
 
         /// <summary>
