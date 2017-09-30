@@ -22,9 +22,9 @@ namespace refactor_me.Models.Base
         /// The primary key of this object
         /// </summary>
         /// <remarks>
-        /// I'm assuming that this should always have a value on a properly
-        /// constructed object - either retrieved from the database or
-        /// a new GUID if it's a new object.
+        /// -- I'm assuming that this should always have a value on a properly
+        /// -- constructed object - either retrieved from the database or
+        /// -- a new GUID if it's a new object.
         /// </remarks>
         public Guid Id
         {
