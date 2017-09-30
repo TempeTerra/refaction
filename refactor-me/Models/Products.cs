@@ -53,8 +53,8 @@ namespace refactor_me.Models
             {
                 conn.Open();
 
-                var cmd = new SqlCommand($"select id from product where name COLLATE UTF8_GENERAL_CI like %@Pattern%", conn);
-                cmd.Parameters.AddWithValue("@Pattern", pattern);
+                var cmd = new SqlCommand($"select id from product where name COLLATE Latin1_General_CI_AS like @Pattern", conn);
+                cmd.Parameters.AddWithValue("@Pattern", $"%{pattern.ToLower()}%");
 
                 var rdr = cmd.ExecuteReader();
                 while (rdr.Read())

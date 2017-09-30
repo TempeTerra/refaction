@@ -36,7 +36,7 @@ namespace refactor_me.Models
                 conn.Open();
 
                 var cmd = new SqlCommand("select * from product where id = @Id", conn);
-                cmd.Parameters.AddWithValue("@Id", Id);
+                cmd.Parameters.AddWithValue("@Id", id);
 
                 var rdr = cmd.ExecuteReader();
 
