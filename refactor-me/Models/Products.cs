@@ -21,15 +21,17 @@ namespace refactor_me.Models
         private void LoadProducts(string where)
         {
             Items = new List<Product>();
-            var conn = Helpers.NewConnection();
-            var cmd = new SqlCommand($"select id from product {where}", conn);
-            conn.Open();
-
-            var rdr = cmd.ExecuteReader();
-            while (rdr.Read())
+            using (var conn = Helpers.NewConnection())
             {
-                var id = Guid.Parse(rdr["id"].ToString());
-                Items.Add(new Product(id));
+                var cmd = new SqlCommand($"select id from product {where}", conn);
+                conn.Open();
+
+                var rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    var id = Guid.Parse(rdr["id"].ToString());
+                    Items.Add(new Product(id));
+                }
             }
         }
     }
