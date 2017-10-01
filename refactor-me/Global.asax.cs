@@ -18,7 +18,7 @@ namespace refactor_me
             GlobalConfiguration.Configuration.Filters.Add(new ValidateModelAttribute());
 
             // Don't leak error details in responses
-            GlobalConfiguration.Configuration.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Never;
+            // GlobalConfiguration.Configuration.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Never;
         }
     }
 }

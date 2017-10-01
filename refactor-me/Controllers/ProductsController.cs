@@ -5,7 +5,6 @@ using refactor_me.DomainObjects.ValueTypes;
 using refactor_me.Services;
 using System;
 using System.Configuration;
-using System.Net;
 using System.Web.Http;
 
 namespace refactor_me.Controllers
@@ -30,112 +29,66 @@ namespace refactor_me.Controllers
         [HttpGet]
         public Products GetAll()
         {
-            try
-            {
-                return _service.GetAllProducts();
-            }
-            catch (Exception)
-            {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
+            return _service.GetAllProducts();
         }
 
         [Route]
         [HttpGet]
         public Products SearchByName(string name)
         {
-            try
-            {
-                return _service.SearchByName(name);
-            }
-            catch (Exception)
-            {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
+            return _service.SearchByName(name);
         }
 
         [Route("{id}")]
         [HttpGet]
         public Product GetProduct(Guid id)
         {
-            try
-            {
-                return _service.GetProduct(id);
-            }
-            catch(Exception)
-            {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
+            return _service.GetProduct(id);
         }
 
         [Route]
         [HttpPost]
         public void Create(Product product)
         {
-            try
-            {
-                _service.CreateProduct(product);
-            }
-            catch (Exception)
-            {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);
-            }
+            _service.CreateProduct(product);
         }
 
         [Route("{id}")]
         [HttpPut]
-        public void Update(Guid id, Product product)
+        public void Update(Guid id, Product orig)
         {
-            try
+            // Mapping values onto a new Product here avoids an
+            // auto-generated ID and sets the IsNew flag properly
+            var product = new Product(id)
             {
-                _service.UpdateProduct(product);
-            }
-            catch(Exception)
-            {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);
-            }
+                Name = orig.Name,
+                Description = orig.Description,
+                Price = orig.Price,
+                DeliveryPrice = orig.DeliveryPrice
+            };
+
+            _service.UpdateProduct(product);
         }
 
         [Route("{id}")]
         [HttpDelete]
         public void Delete(Guid id)
         {
-            try
-            {
-                _service.DeleteProduct(id);
-            }
-            catch (Exception)
-            {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);
-            }
+            _service.DeleteProduct(id);
         }
 
         [Route("{productId}/options")]
         [HttpGet]
         public ProductOptions GetOptions(Guid productId)
         {
-            try
-            {
-                return _service.GetProductOptions(productId);
-            }
-            catch (Exception)
-            {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
+            return _service.GetProductOptions(productId);
         }
 
-        [Route("{productId}/options/{id}")]
+        [Route("{productId}/options/{optionId}")]
         [HttpGet]
         public ProductOption GetOption(Guid productId, Guid optionId)
         {
-            try
-            {
-                return _service.GetProductOption(productId, optionId);
-            }
-            catch (Exception)
-            {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
+            return _service.GetProductOption(productId, optionId);
         }
 
         [Route("{productId}/options")]
@@ -143,6 +96,7 @@ namespace refactor_me.Controllers
         public void CreateOption(Guid productId, ProductOption option)
         {
             option.ProductId = productId;
+
             _service.CreateProductOption(option);
         }
 
@@ -150,34 +104,22 @@ namespace refactor_me.Controllers
         [HttpPut]
         public void UpdateOption(Guid id, ProductOption option)
         {
+            // Mapping values onto a new Product here avoids an
+            // auto-generated ID and sets the IsNew flag properly
             var orig = new ProductOption(id)
             {
                 Name = option.Name,
                 Description = option.Description
             };
 
-            try
-            {
-                _service.UpdateProductOption(orig);
-            }
-            catch (Exception)
-            {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);
-            }
+            _service.UpdateProductOption(orig);
         }
 
         [Route("{productId}/options/{id}")]
         [HttpDelete]
         public void DeleteOption(Guid id)
         {
-            try
-            {
-                _service.DeleteProductOption(id);
-            }
-            catch (Exception)
-            {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);
-            }
+            _service.DeleteProductOption(id);
         }
     }
 }
