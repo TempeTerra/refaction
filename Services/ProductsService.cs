@@ -105,7 +105,10 @@ namespace refactor_me.Services
 
         public void DeleteProduct(Guid productId)
         {
-            // TODO transaction
+            // -- TODO transaction
+            // -- These deletes should happen inside a transaction so the database can't
+            // -- end up in an inconsistent state. I'd tend to do it with a unit of work,
+            // -- provided as a parameter to the repositories with the delete calls.
 
             // Delete related ProductOptions
             var relatedProductOptions = _productOptionRepository.GetForProduct(productId);

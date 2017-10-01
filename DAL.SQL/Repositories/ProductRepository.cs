@@ -22,7 +22,7 @@ namespace refactor_me.Dal.Sql.Repositories
             {
                 conn.Open();
 
-                var cmd = new SqlCommand("select id from product", conn);
+                var cmd = new SqlCommand("select * from product", conn);
 
                 var rdr = cmd.ExecuteReader();
                 while (rdr.Read())
@@ -49,7 +49,7 @@ namespace refactor_me.Dal.Sql.Repositories
             {
                 conn.Open();
 
-                var cmd = new SqlCommand("select id from product where name COLLATE Latin1_General_CI_AS like @Pattern", conn);
+                var cmd = new SqlCommand("select * from product where name COLLATE Latin1_General_CI_AS like @Pattern", conn);
                 cmd.Parameters.AddWithValue("@Pattern", $"%{pattern.ToLower()}%");
 
                 var rdr = cmd.ExecuteReader();

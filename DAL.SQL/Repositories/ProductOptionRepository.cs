@@ -20,7 +20,7 @@ namespace refactor_me.Dal.Sql.Repositories
             var Items = new List<ProductOption>();
             using (var conn = _connectionFactory.NewConnection())
             {
-                var cmd = new SqlCommand("select id from productoption", conn);
+                var cmd = new SqlCommand("select * from productoption", conn);
                 conn.Open();
 
                 var rdr = cmd.ExecuteReader();
@@ -40,7 +40,7 @@ namespace refactor_me.Dal.Sql.Repositories
             {
                 conn.Open();
 
-                var cmd = new SqlCommand("select id from productoption where productid = @ProductId", conn);
+                var cmd = new SqlCommand("select * from productoption where productid = @ProductId", conn);
                 cmd.Parameters.AddWithValue("@ProductId", productId);
 
                 var rdr = cmd.ExecuteReader();
