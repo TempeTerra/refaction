@@ -1,8 +1,8 @@
 ﻿using refactor_me.Dal.Sql;
 using refactor_me.Dal.Sql.Repositories;
-using refactor_me.Entities;
+using refactor_me.DomainObjects.Entities;
+using refactor_me.DomainObjects.ValueTypes;
 using refactor_me.Services;
-using refactor_me.Services.Models;
 using System;
 using System.Configuration;
 using System.Net;

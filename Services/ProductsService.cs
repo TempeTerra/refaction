@@ -1,7 +1,7 @@
 ﻿using refactor_me.Dal.Repositories;
-using refactor_me.Entities;
+using refactor_me.DomainObjects.Entities;
+using refactor_me.DomainObjects.ValueTypes;
 using refactor_me.Services.Exceptions;
-using refactor_me.Services.Models;
 using System;
 using System.Data.SqlClient;
 

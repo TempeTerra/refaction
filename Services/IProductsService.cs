@@ -1,6 +1,6 @@
-﻿using System;
-using refactor_me.Entities;
-using refactor_me.Services.Models;
+﻿using refactor_me.DomainObjects.Entities;
+using refactor_me.DomainObjects.ValueTypes;
+using System;
 
 namespace refactor_me.Services
 {

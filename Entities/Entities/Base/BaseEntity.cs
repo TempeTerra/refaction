@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace refactor_me.Entities.Base
+namespace refactor_me.DomainObjects.Entities.Base
 {
     /// <summary>
     /// A base class for other models in this project.

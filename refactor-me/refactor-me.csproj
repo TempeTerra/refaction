@@ -115,9 +115,9 @@
       <Project>{85aefd18-c7e1-43f1-a5d6-e04b812f15f9}</Project>
       <Name>DAL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Entities\Entities.csproj">
+    <ProjectReference Include="..\Entities\DomainObjects.csproj">
       <Project>{4C5DD2C3-0853-4EA4-8463-239CD0FFFF1E}</Project>
-      <Name>Entities</Name>
+      <Name>DomainObjects</Name>
     </ProjectReference>
     <ProjectReference Include="..\Services\Services.csproj">
       <Project>{E5F6F25D-1E60-44DC-ACD2-67E9288E56D7}</Project>

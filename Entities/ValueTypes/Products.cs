@@ -1,7 +1,7 @@
-﻿using refactor_me.Entities;
+﻿using refactor_me.DomainObjects.Entities;
 using System.Collections.Generic;
 
-namespace refactor_me.Services.Models
+namespace refactor_me.DomainObjects.ValueTypes
 {
     /// <summary>
     /// Represents a list of <see cref="Product"/>s

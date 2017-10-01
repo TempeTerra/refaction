@@ -1,4 +1,4 @@
-﻿using refactor_me.Entities;
+﻿using refactor_me.DomainObjects.Entities;
 using System;
 
 namespace Tests.TestData.StaticEntities.Products

@@ -50,9 +50,9 @@
       <Project>{85AEFD18-C7E1-43F1-A5D6-E04B812F15F9}</Project>
       <Name>DAL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Entities\Entities.csproj">
+    <ProjectReference Include="..\Entities\DomainObjects.csproj">
       <Project>{4C5DD2C3-0853-4EA4-8463-239CD0FFFF1E}</Project>
-      <Name>Entities</Name>
+      <Name>DomainObjects</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

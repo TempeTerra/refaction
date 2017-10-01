@@ -1,5 +1,5 @@
-﻿using System;
-using refactor_me.Entities;
+﻿using refactor_me.DomainObjects.Entities;
+using System;
 
 namespace refactor_me.Dal.Repositories
 {

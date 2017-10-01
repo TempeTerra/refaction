@@ -1,4 +1,4 @@
-﻿using refactor_me.Entities.Base;
+﻿using refactor_me.DomainObjects.Entities.Base;
 using System;
 using System.Runtime.Serialization;
 

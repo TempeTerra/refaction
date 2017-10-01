@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
-using refactor_me.Entities.Base;
+using refactor_me.DomainObjects.Entities.Base;
 using System;
 
-namespace refactor_me.Entities
+namespace refactor_me.DomainObjects.Entities
 {
     /// <summary>
     /// An optional subtype of a <see cref="Product"/>, for example a colour variant

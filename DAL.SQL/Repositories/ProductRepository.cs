@@ -1,5 +1,5 @@
 ﻿using refactor_me.Dal.Repositories;
-using refactor_me.Entities;
+using refactor_me.DomainObjects.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;

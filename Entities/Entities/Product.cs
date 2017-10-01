@@ -1,7 +1,7 @@
-﻿using refactor_me.Entities.Base;
+﻿using refactor_me.DomainObjects.Entities.Base;
 using System;
 
-namespace refactor_me.Entities
+namespace refactor_me.DomainObjects.Entities
 {
     /// <summary>
     /// A high-level description of a product.
