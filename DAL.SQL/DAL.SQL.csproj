@@ -42,6 +42,10 @@
   <ItemGroup>
     <Compile Include="ConnectionFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Exceptions\DeleteIdNotFoundException.cs" />
+    <Compile Include="Exceptions\DuplicateIdException.cs" />
+    <Compile Include="Exceptions\NoRowsCreatedException.cs" />
+    <Compile Include="Exceptions\NoRowsUpdatedException.cs" />
     <Compile Include="Repositories\ProductOptionRepository.cs" />
     <Compile Include="Repositories\ProductRepository.cs" />
   </ItemGroup>

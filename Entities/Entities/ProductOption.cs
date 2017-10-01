@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using refactor_me.DomainObjects.Entities.Base;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace refactor_me.DomainObjects.Entities
 {
@@ -13,16 +14,20 @@ namespace refactor_me.DomainObjects.Entities
         /// The ID of the product this option applies to
         /// </summary>
         [JsonIgnore]
+        [Required]
         public Guid ProductId { get; set; }
 
         /// <summary>
         /// The full product name including the option variant
         /// </summary>
+        [Required]
+        [MaxLength(100)]
         public string Name { get; set; }
 
         /// <summary>
         /// A description of the product
         /// </summary>
+        [MaxLength(500)]
         public string Description { get; set; }
 
         /// <summary>
@@ -35,7 +40,6 @@ namespace refactor_me.DomainObjects.Entities
         public ProductOption()
             : base(isNew: true)
         {
-            Id = Guid.NewGuid();
         }
 
         /// <summary>
@@ -45,7 +49,7 @@ namespace refactor_me.DomainObjects.Entities
         public ProductOption(Guid id)
             : base(isNew: false)
         {
-
+            Id = id;
         }
 
         public override string ToString()

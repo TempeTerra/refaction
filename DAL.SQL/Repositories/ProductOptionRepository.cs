@@ -98,7 +98,12 @@ namespace refactor_me.Dal.Sql.Repositories
                 cmd.Parameters.AddWithValue("@Name", entity.Name);
                 cmd.Parameters.AddWithValue("@Description", entity.Description);
 
-                cmd.ExecuteNonQuery();
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                if (rowsAffected != 1)
+                {
+                    throw new NoRowsCreatedException(entity);
+                }
             }
         }
 
@@ -111,11 +116,19 @@ namespace refactor_me.Dal.Sql.Repositories
                 SqlCommand cmd = new SqlCommand($"update productoption set name = @Name, description = @Description where id = @Id", conn);
 
                 cmd.Parameters.AddWithValue("@Id", entity.Id);
-                cmd.Parameters.AddWithValue("@ProductId", entity.ProductId); // this is not used in the second query, test to check if it's a problem
                 cmd.Parameters.AddWithValue("@Name", entity.Name);
                 cmd.Parameters.AddWithValue("@Description", entity.Description);
 
-                cmd.ExecuteNonQuery();
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                if(rowsAffected == 0)
+                {
+                    throw new NoRowsUpdatedException(entity);
+                }
+                else if (rowsAffected > 1)
+                {
+                    throw new DuplicateIdException(entity);
+                }
             }
         }
 
@@ -128,7 +141,16 @@ namespace refactor_me.Dal.Sql.Repositories
                 var cmd = new SqlCommand("delete from productoption where id = @Id", conn);
                 cmd.Parameters.AddWithValue("@Id", id);
 
-                cmd.ExecuteReader();
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                if (rowsAffected == 0)
+                {
+                    throw new DeleteIdNotFoundException("Product", id);
+                }
+                else if (rowsAffected > 1)
+                {
+                    throw new DuplicateIdException("Product", id);
+                }
             }
         }
     }

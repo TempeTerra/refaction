@@ -113,7 +113,12 @@ namespace refactor_me.Dal.Sql.Repositories
                 cmd.Parameters.AddWithValue("@Price", entity.Price);
                 cmd.Parameters.AddWithValue("@DeliveryPrice", entity.DeliveryPrice);
 
-                cmd.ExecuteNonQuery();
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                if(rowsAffected != 1)
+                {
+                    throw new NoRowsCreatedException(entity);
+                }
             }
         }
 
@@ -131,7 +136,16 @@ namespace refactor_me.Dal.Sql.Repositories
                 cmd.Parameters.AddWithValue("@Price", entity.Price);
                 cmd.Parameters.AddWithValue("@DeliveryPrice", entity.DeliveryPrice);
 
-                cmd.ExecuteNonQuery();
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                if(rowsAffected == 0)
+                {
+                    throw new NoRowsUpdatedException(entity);
+                }
+                else if (rowsAffected > 1)
+                {
+                    throw new DuplicateIdException(entity);
+                }
             }
         }
 
@@ -144,7 +158,16 @@ namespace refactor_me.Dal.Sql.Repositories
                 var cmd = new SqlCommand($"delete from product where id = @Id", conn);
                 cmd.Parameters.AddWithValue("@Id", id);
 
-                cmd.ExecuteNonQuery();
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                if(rowsAffected == 0)
+                {
+                    throw new DeleteIdNotFoundException("Product", id);
+                }
+                else if(rowsAffected > 1)
+                {
+                    throw new DuplicateIdException("Product", id);
+                }
             }
         }
     }

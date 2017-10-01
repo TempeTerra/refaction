@@ -59,6 +59,11 @@ namespace refactor_me.DomainObjects.Entities.Base
         protected BaseEntity(bool isNew)
         {
             IsNew = isNew;
+
+            if(IsNew)
+            {
+                Id = Guid.NewGuid();
+            }
         }
     }
 }
