@@ -27,7 +27,7 @@ namespace refactor_me.DomainObjects.Entities
         public decimal Price { get; set; }
 
         /// <summary>
-        /// The additional price to have the product delivered (?)
+        /// The additional price to have the Product delivered
         /// </summary>
         public decimal DeliveryPrice { get; set; }
 
