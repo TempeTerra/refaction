@@ -1,5 +1,6 @@
 ﻿using refactor_me.DomainObjects.Entities;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace refactor_me.DomainObjects.ValueTypes
 {
@@ -22,6 +23,11 @@ namespace refactor_me.DomainObjects.ValueTypes
         public Products(IEnumerable<Product> items)
         {
             this.Items = items;
+        }
+
+        public override string ToString()
+        {
+            return $"{nameof(Products)}[{Items?.Count()}]";
         }
     }
 }

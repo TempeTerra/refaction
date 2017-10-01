@@ -53,5 +53,10 @@ namespace refactor_me.DomainObjects.Entities
         {
 
         }
+
+        public override string ToString()
+        {
+            return $"{nameof(Product)} {Name}";
+        }
     }
 }
