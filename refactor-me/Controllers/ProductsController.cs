@@ -1,85 +1,94 @@
-﻿using System;
-using System.Net;
+﻿using refactor_me.Dal.Sql;
+using refactor_me.Dal.Sql.Repositories;
+using refactor_me.DomainObjects.Entities;
+using refactor_me.DomainObjects.ValueTypes;
+using refactor_me.Services;
+using System;
+using System.Configuration;
 using System.Web.Http;
-using refactor_me.Models;
 
 namespace refactor_me.Controllers
 {
     [RoutePrefix("products")]
     public class ProductsController : ApiController
     {
+        private readonly IProductsService _service;
+
+        public ProductsController()
+        {
+            // -- This is all ripe for dependency injection
+            string entityStorageConnectionString = ConfigurationManager.ConnectionStrings["EntityStorage"].ConnectionString;
+            var connectionFactory = new ConnectionFactory(entityStorageConnectionString);
+            var productOptionRepository = new ProductOptionRepository(connectionFactory);
+            var productRepository = new ProductRepository(connectionFactory);
+
+            this._service = new ProductsService(productRepository, productOptionRepository);
+        }
+
         [Route]
         [HttpGet]
         public Products GetAll()
         {
-            return new Products();
+            return _service.GetAllProducts();
         }
 
         [Route]
         [HttpGet]
         public Products SearchByName(string name)
         {
-            return new Products(name);
+            return _service.SearchByName(name);
         }
 
         [Route("{id}")]
         [HttpGet]
         public Product GetProduct(Guid id)
         {
-            var product = new Product(id);
-            if (product.IsNew)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-
-            return product;
+            return _service.GetProduct(id);
         }
 
         [Route]
         [HttpPost]
         public void Create(Product product)
         {
-            product.Save();
+            _service.CreateProduct(product);
         }
 
         [Route("{id}")]
         [HttpPut]
-        public void Update(Guid id, Product product)
+        public void Update(Guid id, Product orig)
         {
-            var orig = new Product(id)
+            // Mapping values onto a new Product here avoids an
+            // auto-generated ID and sets the IsNew flag properly
+            var product = new Product(id)
             {
-                Name = product.Name,
-                Description = product.Description,
-                Price = product.Price,
-                DeliveryPrice = product.DeliveryPrice
+                Name = orig.Name,
+                Description = orig.Description,
+                Price = orig.Price,
+                DeliveryPrice = orig.DeliveryPrice
             };
 
-            if (!orig.IsNew)
-                orig.Save();
+            _service.UpdateProduct(product);
         }
 
         [Route("{id}")]
         [HttpDelete]
         public void Delete(Guid id)
         {
-            var product = new Product(id);
-            product.Delete();
+            _service.DeleteProduct(id);
         }
 
         [Route("{productId}/options")]
         [HttpGet]
         public ProductOptions GetOptions(Guid productId)
         {
-            return new ProductOptions(productId);
+            return _service.GetProductOptions(productId);
         }
 
-        [Route("{productId}/options/{id}")]
+        [Route("{productId}/options/{optionId}")]
         [HttpGet]
-        public ProductOption GetOption(Guid productId, Guid id)
+        public ProductOption GetOption(Guid productId, Guid optionId)
         {
-            var option = new ProductOption(id);
-            if (option.IsNew)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-
-            return option;
+            return _service.GetProductOption(productId, optionId);
         }
 
         [Route("{productId}/options")]
@@ -87,29 +96,30 @@ namespace refactor_me.Controllers
         public void CreateOption(Guid productId, ProductOption option)
         {
             option.ProductId = productId;
-            option.Save();
+
+            _service.CreateProductOption(option);
         }
 
         [Route("{productId}/options/{id}")]
         [HttpPut]
         public void UpdateOption(Guid id, ProductOption option)
         {
+            // Mapping values onto a new Product here avoids an
+            // auto-generated ID and sets the IsNew flag properly
             var orig = new ProductOption(id)
             {
                 Name = option.Name,
                 Description = option.Description
             };
 
-            if (!orig.IsNew)
-                orig.Save();
+            _service.UpdateProductOption(orig);
         }
 
         [Route("{productId}/options/{id}")]
         [HttpDelete]
         public void DeleteOption(Guid id)
         {
-            var opt = new ProductOption(id);
-            opt.Delete();
+            _service.DeleteProductOption(id);
         }
     }
 }
