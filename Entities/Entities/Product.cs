@@ -10,6 +10,11 @@ namespace refactor_me.DomainObjects.Entities
     /// May have <see cref="ProductOption"/>s to specify different subtypes, 
     /// such as different colours.
     /// </summary>
+    /// <remarks>
+    /// -- Apparently validation of Decimals is a problem. Added a Range
+    /// -- annotation from 0 to (18 significant figures) which be about
+    /// -- right for the database columns (length 9, precision 18, scale 2)
+    /// </remarks>
     public class Product : BaseEntity
     {
         /// <summary>
@@ -29,12 +34,14 @@ namespace refactor_me.DomainObjects.Entities
         /// The price of the Product
         /// </summary>
         [Required]
+        [Range(0, 9999999999999999.99)] // -- this needs a better solution
         public decimal Price { get; set; }
 
         /// <summary>
         /// The additional price to have the Product delivered
         /// </summary>
         [Required]
+        [Range(0, 9999999999999999.99)] // -- this needs a better solution
         public decimal DeliveryPrice { get; set; }
 
         /// <summary>
