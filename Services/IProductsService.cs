@@ -4,6 +4,9 @@ using System;
 
 namespace refactor_me.Services
 {
+    /// <summary>
+    /// Provides high level operations on <see cref="Product"/>s and <see cref="ProductOption"/>s
+    /// </summary>
     public interface IProductsService
     {
         /// <summary>
