@@ -30,14 +30,28 @@ namespace refactor_me.Controllers
         [HttpGet]
         public Products GetAll()
         {
-            return _service.GetAllProducts();
+            try
+            {
+                return _service.GetAllProducts();
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
         }
 
         [Route]
         [HttpGet]
         public Products SearchByName(string name)
         {
-            return _service.SearchByName(name);
+            try
+            {
+                return _service.SearchByName(name);
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
         }
 
         [Route("{id}")]
@@ -48,9 +62,8 @@ namespace refactor_me.Controllers
             {
                 return _service.GetProduct(id);
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                // TODO selective error handling, or meaningful result from service
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
         }
@@ -59,46 +72,70 @@ namespace refactor_me.Controllers
         [HttpPost]
         public void Create(Product product)
         {
-            _service.CreateProduct(product);
+            try
+            {
+                _service.CreateProduct(product);
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);
+            }
         }
 
         [Route("{id}")]
         [HttpPut]
         public void Update(Guid id, Product product)
         {
-            // TODO separate ID is awkward
-            _service.UpdateProduct(product);
-
-            //TODO remember to check for existing product
-            //if (!orig.IsNew)
-            //    orig.Save();
+            try
+            {
+                _service.UpdateProduct(product);
+            }
+            catch(Exception)
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);
+            }
         }
 
         [Route("{id}")]
         [HttpDelete]
         public void Delete(Guid id)
         {
-            _service.DeleteProduct(id);
+            try
+            {
+                _service.DeleteProduct(id);
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);
+            }
         }
 
         [Route("{productId}/options")]
         [HttpGet]
         public ProductOptions GetOptions(Guid productId)
         {
-            return _service.GetProductOptions(productId);
+            try
+            {
+                return _service.GetProductOptions(productId);
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
         }
 
         [Route("{productId}/options/{id}")]
         [HttpGet]
         public ProductOption GetOption(Guid productId, Guid optionId)
         {
-            //TODO product id not actually used
-            // better check it to avoid showing an invalid option for a 
-            // product
-            //if (option.IsNew)
-            //    throw new HttpResponseException(HttpStatusCode.NotFound);
-
-            return _service.GetProductOption(productId, optionId);
+            try
+            {
+                return _service.GetProductOption(productId, optionId);
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
         }
 
         [Route("{productId}/options")]
@@ -119,18 +156,28 @@ namespace refactor_me.Controllers
                 Description = option.Description
             };
 
-            //TODO
-            //if (!orig.IsNew)
-            //    orig.Save();
-
-            _service.UpdateProductOption(orig);
+            try
+            {
+                _service.UpdateProductOption(orig);
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);
+            }
         }
 
         [Route("{productId}/options/{id}")]
         [HttpDelete]
         public void DeleteOption(Guid id)
         {
-            _service.DeleteProductOption(id);
+            try
+            {
+                _service.DeleteProductOption(id);
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);
+            }
         }
     }
 }
