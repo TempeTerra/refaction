@@ -26,8 +26,7 @@ namespace refactor_me.Dal.Sql.Repositories
                 var rdr = cmd.ExecuteReader();
                 while (rdr.Read())
                 {
-                    var id = Guid.Parse(rdr["id"].ToString());
-                    Items.Add(Get(id));
+                    Items.Add(FromReader(rdr));
                 }
             }
 
@@ -47,8 +46,7 @@ namespace refactor_me.Dal.Sql.Repositories
                 var rdr = cmd.ExecuteReader();
                 while (rdr.Read())
                 {
-                    var id = Guid.Parse(rdr["id"].ToString());
-                    Items.Add(Get(id));
+                    Items.Add(FromReader(rdr));
                 }
             }
 
@@ -74,12 +72,7 @@ namespace refactor_me.Dal.Sql.Repositories
                     throw new ArgumentException($"No {nameof(Product)} was found with id {id}");
                 }
 
-                result.Id = Guid.Parse(rdr["Id"].ToString());
-                result.ProductId = Guid.Parse(rdr["ProductId"].ToString());
-                result.Name = rdr["Name"].ToString();
-                result.Description = (DBNull.Value == rdr["Description"])
-                    ? null
-                    : rdr["Description"].ToString();
+                result = FromReader(rdr);
             }
 
             return result;
@@ -121,7 +114,7 @@ namespace refactor_me.Dal.Sql.Repositories
 
                 int rowsAffected = cmd.ExecuteNonQuery();
 
-                if(rowsAffected == 0)
+                if (rowsAffected == 0)
                 {
                     throw new NoRowsUpdatedException(entity);
                 }
@@ -152,6 +145,23 @@ namespace refactor_me.Dal.Sql.Repositories
                     throw new DuplicateIdException("Product", id);
                 }
             }
+        }
+
+        private ProductOption FromReader(SqlDataReader rdr)
+        {
+            // Get the ID first so we can construct the entity with IsNew = false
+            Guid id = Guid.Parse(rdr["Id"].ToString());
+
+            var result = new ProductOption(id)
+            {
+                ProductId = Guid.Parse(rdr["ProductId"].ToString()),
+                Name = rdr["Name"].ToString(),
+                Description = (DBNull.Value == rdr["Description"])
+                    ? null
+                    : rdr["Description"].ToString()
+            };
+
+            return result;
         }
     }
 }

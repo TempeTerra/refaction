@@ -12,7 +12,7 @@ namespace refactor_me.DomainObjects.Entities
     /// </summary>
     /// <remarks>
     /// -- Apparently validation of Decimals is a problem. Added a Range
-    /// -- annotation from 0 to (18 significant figures) which be about
+    /// -- annotation from 0 to (18 significant figures) which should be
     /// -- right for the database columns (length 9, precision 18, scale 2)
     /// </remarks>
     public class Product : BaseEntity

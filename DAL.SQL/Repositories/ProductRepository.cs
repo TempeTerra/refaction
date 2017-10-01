@@ -27,8 +27,7 @@ namespace refactor_me.Dal.Sql.Repositories
                 var rdr = cmd.ExecuteReader();
                 while (rdr.Read())
                 {
-                    var id = Guid.Parse(rdr["id"].ToString());
-                    Items.Add(Get(id));
+                    Items.Add(FromReader(rdr));
                 }
             }
 
@@ -37,7 +36,7 @@ namespace refactor_me.Dal.Sql.Repositories
 
         public Product[] SearchByName(string pattern)
         {
-            if(pattern == null)
+            if (pattern == null)
             {
                 // This could also be handled by treating null as empty string,
                 // or by returning no results. I'm inclined to throw a description
@@ -56,8 +55,7 @@ namespace refactor_me.Dal.Sql.Repositories
                 var rdr = cmd.ExecuteReader();
                 while (rdr.Read())
                 {
-                    var id = Guid.Parse(rdr["id"].ToString());
-                    Items.Add(Get(id));
+                    Items.Add(FromReader(rdr));
                 }
             }
 
@@ -66,7 +64,7 @@ namespace refactor_me.Dal.Sql.Repositories
 
         public Product Get(Guid id)
         {
-            Product entity = new Product(id);
+            Product entity;
 
             using (var conn = _connectionFactory.NewConnection())
             {
@@ -87,13 +85,7 @@ namespace refactor_me.Dal.Sql.Repositories
                     throw new ArgumentException($"No {nameof(Product)} was found with Id {id}");
                 }
 
-                entity.Id = Guid.Parse(rdr["Id"].ToString());
-                entity.Name = rdr["Name"].ToString();
-                entity.Description = (DBNull.Value == rdr["Description"])
-                    ? null
-                    : rdr["Description"].ToString();
-                entity.Price = decimal.Parse(rdr["Price"].ToString());
-                entity.DeliveryPrice = decimal.Parse(rdr["DeliveryPrice"].ToString());
+                entity = FromReader(rdr);
             }
 
             return entity;
@@ -115,7 +107,7 @@ namespace refactor_me.Dal.Sql.Repositories
 
                 int rowsAffected = cmd.ExecuteNonQuery();
 
-                if(rowsAffected != 1)
+                if (rowsAffected != 1)
                 {
                     throw new NoRowsCreatedException(entity);
                 }
@@ -138,7 +130,7 @@ namespace refactor_me.Dal.Sql.Repositories
 
                 int rowsAffected = cmd.ExecuteNonQuery();
 
-                if(rowsAffected == 0)
+                if (rowsAffected == 0)
                 {
                     throw new NoRowsUpdatedException(entity);
                 }
@@ -160,15 +152,32 @@ namespace refactor_me.Dal.Sql.Repositories
 
                 int rowsAffected = cmd.ExecuteNonQuery();
 
-                if(rowsAffected == 0)
+                if (rowsAffected == 0)
                 {
                     throw new DeleteIdNotFoundException("Product", id);
                 }
-                else if(rowsAffected > 1)
+                else if (rowsAffected > 1)
                 {
                     throw new DuplicateIdException("Product", id);
                 }
             }
+        }
+
+        private Product FromReader(SqlDataReader rdr)
+        {
+            Guid id = Guid.Parse(rdr["Id"].ToString());
+
+            Product result = new Product(id)
+            {
+                Name = rdr["Name"].ToString(),
+                Description = (DBNull.Value == rdr["Description"])
+                    ? null
+                    : rdr["Description"].ToString(),
+                Price = decimal.Parse(rdr["Price"].ToString()),
+                DeliveryPrice = decimal.Parse(rdr["DeliveryPrice"].ToString()),
+            };
+
+            return result;
         }
     }
 }
