@@ -67,7 +67,7 @@ namespace refactor_me.Controllers
         public void Update(Guid id, Product product)
         {
             // TODO separate ID is awkward
-            _service.Update(product);
+            _service.UpdateProduct(product);
 
             //TODO remember to check for existing product
             //if (!orig.IsNew)

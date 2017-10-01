@@ -37,6 +37,14 @@ namespace refactor_me.Dal.Sql.Repositories
 
         public Product[] SearchByName(string pattern)
         {
+            if(pattern == null)
+            {
+                // This could also be handled by treating null as empty string,
+                // or by returning no results. I'm inclined to throw a description
+                // exception until further behavior specification is available.
+                throw new ArgumentNullException(nameof(pattern), "SearchByName pattern must not be null");
+            }
+
             var Items = new List<Product>();
             using (var conn = _connectionFactory.NewConnection())
             {

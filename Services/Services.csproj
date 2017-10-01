@@ -43,6 +43,9 @@
     <Compile Include="IProductsService.cs" />
     <Compile Include="Models\ProductOptions.cs" />
     <Compile Include="Models\Products.cs" />
+    <Compile Include="Exceptions\OperationFailedException.cs" />
+    <Compile Include="Exceptions\ProductOptionMismatchException.cs" />
+    <Compile Include="Exceptions\NotANewEntityException.cs" />
     <Compile Include="ProductsService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
