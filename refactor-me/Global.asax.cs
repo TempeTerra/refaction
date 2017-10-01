@@ -16,6 +16,9 @@ namespace refactor_me
 
             // Add a global filter to validate submitted models
             GlobalConfiguration.Configuration.Filters.Add(new ValidateModelAttribute());
+
+            // Don't leak error details in responses
+            GlobalConfiguration.Configuration.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Never;
         }
     }
 }
