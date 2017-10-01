@@ -6,13 +6,15 @@ using refactor_me.DomainObjects.ValueTypes;
 using refactor_me.Services;
 using refactor_me.Services.Exceptions;
 using System;
+using System.IO;
 using System.Linq;
 using Tests.TestData.StaticEntities.ProductOptions;
 using Tests.TestData.StaticEntities.Products;
 
 namespace Tests
 {
-    [DeploymentItem(@"TestData\TestDatabase.mdf")]
+    [DeploymentItem(@"TestData\Database.mdf")]
+    [DeploymentItem(@"TestData\Database_log.ldf")]
     [TestClass]
     public class TestProductsService
     {
@@ -22,11 +24,10 @@ namespace Tests
         public void Init()
         {
             // Create Service and dependencies
-            // -- Hack around deployment item failure :(
-            // -- I've done this in the real world using an in-memory Linq storage
-            // -- provider, which worked much better
-            string staticTestDatabasePath = @"C:\TestData\Database.mdf";
-            string entityStorageConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + staticTestDatabasePath + @";Integrated Security=True";
+
+            // -- Boy I was confused until I figured out that a relative path doesn't work for some reason
+            string testDatabasePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Database.mdf");
+            string entityStorageConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + testDatabasePath + @";Integrated Security=True";
             var connectionFactory = new ConnectionFactory(entityStorageConnectionString);
             var productOptionRepository = new ProductOptionRepository(connectionFactory);
             var productRepository = new ProductRepository(connectionFactory);
